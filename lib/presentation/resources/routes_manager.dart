@@ -7,6 +7,7 @@ import 'package:flutter_advanced_clean_architecture/presentation/onboarding/view
 import 'package:flutter_advanced_clean_architecture/presentation/resources/strings_manager.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/splash/splash_view.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/store_details/view/store_details_view.dart';
+import 'package:flutter_advanced_clean_architecture/presentation/web_view/web_view.dart';
 
 import '../../app/di.dart';
 import '../register/view/register_view.dart';
@@ -19,6 +20,7 @@ class Routes{
   static const String resetPasswordRoute = "/resetPassword";
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
+  static const String webViewContactUsRoute = "/webViewContactUsRoute";
 }
 
 class RouteGenerator{
@@ -43,6 +45,8 @@ class RouteGenerator{
       case Routes.storeDetailsRoute:
         initStoreDetailsModule();
         return MaterialPageRoute(builder: (_)=> const StoreDetailsView());
+        case Routes.webViewContactUsRoute:
+        return MaterialPageRoute(builder: (_)=> const WebViewPage());
       default:
         return unDefinedRoute();
     }

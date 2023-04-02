@@ -52,6 +52,7 @@ class AppStrings{
   static const String contactUs = 'contact_us';
   static const String inviteYourFriends = 'invite_your_friends';
   static const String logout = 'logout';
+  static const String webViewUrl = 'https://www.linkedin.com/in/mina-nady-023314227/';
 
   // Error handler
   static const String badRequestError = "bad_request_error";

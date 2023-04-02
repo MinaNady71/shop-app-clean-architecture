@@ -71,7 +71,7 @@ _changeLanguage()async{
 }
 
 _contactUs(){
-  //TODO task to open webpage url
+ Navigator.pushNamed(context, Routes.webViewContactUsRoute);
 }
 
 _inviteFriends(){
