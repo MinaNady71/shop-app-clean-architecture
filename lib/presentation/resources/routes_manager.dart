@@ -43,8 +43,9 @@ class RouteGenerator{
         initHomeModule();
         return MaterialPageRoute(builder: (_)=> const MainView());
       case Routes.storeDetailsRoute:
-        initStoreDetailsModule();
-        return MaterialPageRoute(builder: (_)=> const StoreDetailsView());
+        //initStoreDetailsModule();
+        initStoreDetailsBloc();
+        return MaterialPageRoute(builder: (_)=>  const StoreDetailsView());
         case Routes.webViewContactUsRoute:
         return MaterialPageRoute(builder: (_)=> const WebViewPage());
       default:

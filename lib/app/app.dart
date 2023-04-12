@@ -4,6 +4,9 @@ import 'package:flutter_advanced_clean_architecture/app/di.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/resources/routes_manager.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/resources/theme_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../presentation/store_details/stores_bloc/stores_bloc.dart';
 
 class MyApp extends StatefulWidget {
  // const MyApp({Key? key}) : super(key: key);
@@ -30,13 +33,18 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates:context.localizationDelegates ,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      onGenerateRoute: RouteGenerator.getRoute ,
-        initialRoute: Routes.splashRoute,
-        theme: getApplicationTheme(),
+    return MultiBlocProvider(
+      providers: [
+       BlocProvider<StoresBloc>(create:(_)=> instance<StoresBloc>()..add(GetStoreDetailsDataEvent()))
+      ],
+      child: MaterialApp(
+        localizationsDelegates:context.localizationDelegates ,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        onGenerateRoute: RouteGenerator.getRoute ,
+          initialRoute: Routes.splashRoute,
+          theme: getApplicationTheme(),
+      ),
     );
   }
   

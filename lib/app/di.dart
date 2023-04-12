@@ -12,8 +12,8 @@ import 'package:flutter_advanced_clean_architecture/domain/usecase/reset_passwor
 import 'package:flutter_advanced_clean_architecture/domain/usecase/store_details_usecase.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/forget_password/view_model/reset_password_viewmodel.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/login/viewmodel/login_viewmodel.dart';
+import 'package:flutter_advanced_clean_architecture/presentation/store_details/stores_bloc/stores_bloc.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/store_details/view_model/sotre_details_view_model.dart';
-import 'package:flutter_advanced_clean_architecture/presentation/web_view/web_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -53,6 +53,7 @@ Future<void> initAppModule()async{
   // Repository
   instance.registerLazySingleton<Repository>(() => RepositoryImpl(instance(),instance(), instance()));
 
+
 }
 
  initLoginModule(){
@@ -91,8 +92,12 @@ initStoreDetailsModule(){
   }
 }
 
-// initWebViewViewModule(){
-//   if(!GetIt.I.isRegistered<WebViewViewModel>()) {
-//     instance.registerFactory<WebViewViewModel>(() => WebViewViewModel(instance()));
-//   }
-// }
+initStoreDetailsBloc(){
+  if(!GetIt.I.isRegistered<StoresBloc>()) {
+    //use case
+    instance.registerLazySingleton<StoreDetailsUseCase>(() => StoreDetailsUseCase(instance()));
+    // Bloc stores
+    instance.registerLazySingleton<StoresBloc>(() => StoresBloc(instance()));
+
+  }
+}

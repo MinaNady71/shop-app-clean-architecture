@@ -2,78 +2,82 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_clean_architecture/app/di.dart';
 import 'package:flutter_advanced_clean_architecture/domain/model/models.dart';
+import 'package:flutter_advanced_clean_architecture/presentation/common/state_renderer/state_renderer.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/resources/strings_manager.dart';
-import 'package:flutter_advanced_clean_architecture/presentation/store_details/view_model/sotre_details_view_model.dart';
+import 'package:flutter_advanced_clean_architecture/presentation/store_details/stores_bloc/stores_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../resources/values_manager.dart';
 
 class StoreDetailsView extends StatefulWidget {
-  const StoreDetailsView({Key? key}) : super(key: key);
+   const StoreDetailsView({Key? key}) : super(key: key);
 
   @override
   State<StoreDetailsView> createState() => _StoreDetailsViewState();
 }
 
 class _StoreDetailsViewState extends State<StoreDetailsView> {
-  final StoreDetailsViewModel _viewModel = instance<StoreDetailsViewModel>();
-
-  _bind() {
-    _viewModel.start();
-  }
-
-  @override
-  void initState() {
-    _bind();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppStrings.storesDetails.tr(),
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-      ),
-      body: Center(
-          child: SingleChildScrollView(
-              child: StreamBuilder<FlowState>(
-                  stream: _viewModel.outputStates,
-                  builder: (context, snapshot) =>
-                      snapshot.data
-                          ?.getScreenWidget(context, _getContentWidget(), () {
-                        _viewModel.start();
-                      }) ??
-                      _getContentWidget()))),
-    );
+        appBar: AppBar(
+          title: Text(
+            AppStrings.storesDetails.tr(),
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleSmall,
+          ),
+          leading: IconButton(onPressed: (){
+             instance<StoresBloc>().close();
+              Navigator.pop(context);
+            }, icon: const Icon(Icons.arrow_back)),
+         ),
+        body: BlocBuilder<StoresBloc, StoresState>(
+        builder: (context, state)
+    {
+      if (state is LoadingStoreDetailsState) {
+        return Center(
+          child: StateRenderer(stateRendererType: StateRendererType
+              .fullScreenLoadingState, retryActionFunction: () {}),
+        );
+      } else if (state is SuccessStoreDetailsState) {
+        return
+          Center(
+              child: SingleChildScrollView(
+                  child: FlowStateExtesion(ContentState()).getScreenWidget(context, _getContentWidget(state.storeDetails,context), (){
+                 //   GetStoreDetailsDataEvent();
+                  }),
+              )
+          );
+      }else{
+        return Center(
+          child: StateRenderer(
+              stateRendererType: StateRendererType.fullScreenErrorState,
+              retryActionFunction: () {}),
+        );
+      }
+    }
+    ));
   }
 
-  Widget _getContentWidget() {
-    return StreamBuilder<StoresDetails>(
-        stream: _viewModel.outputStoreDetails,
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            return Column(
+  Widget _getContentWidget(StoresDetails storesDetails,context) {
+    return  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _getStoreDetailsImage(snapshot.data?.image),
-                _getSection(AppStrings.details.tr()),
-                _getStoreDetailsWidget(snapshot.data?.details),
-                _getSection(AppStrings.services.tr()),
-                _getStoreDetailsWidget(snapshot.data?.services),
-                _getSection(AppStrings.aboutStore.tr()),
-                _getStoreDetailsWidget(snapshot.data?.about),
+                _getStoreDetailsImage(storesDetails.image),
+                _getSection(AppStrings.details.tr(),context),
+                _getStoreDetailsWidget(storesDetails.details,context),
+                _getSection(AppStrings.services.tr(),context),
+                _getStoreDetailsWidget(storesDetails.services,context),
+                _getSection(AppStrings.aboutStore.tr(),context),
+                _getStoreDetailsWidget(storesDetails.about,context),
               ],
             );
-          } else {
-            return Container();
           }
-        });
-  }
 
-  Widget _getSection(String title) {
+  Widget _getSection(String title,context) {
     return Padding(
       padding: const EdgeInsets.only(
           top: AppPadding.p12,
@@ -82,7 +86,10 @@ class _StoreDetailsViewState extends State<StoreDetailsView> {
           right: AppPadding.p12),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.labelSmall,
+        style: Theme
+            .of(context)
+            .textTheme
+            .labelSmall,
       ),
     );
   }
@@ -101,7 +108,7 @@ class _StoreDetailsViewState extends State<StoreDetailsView> {
     }
   }
 
-  Widget _getStoreDetailsWidget(String? title) {
+  Widget _getStoreDetailsWidget(String? title,context) {
     if (title != null) {
       return Padding(
         padding: const EdgeInsets.only(
@@ -112,17 +119,14 @@ class _StoreDetailsViewState extends State<StoreDetailsView> {
         child: Text(
           title,
           textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineMedium,
         ),
       );
     } else {
       return Container();
     }
-  }
-
-  @override
-  void dispose() {
-    _viewModel.dispose();
-    super.dispose();
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_advanced_clean_architecture/presentation/resources/color
 import 'package:flutter_advanced_clean_architecture/presentation/resources/strings_manager.dart';
 import 'package:flutter_advanced_clean_architecture/presentation/resources/values_manager.dart';
 
+
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
 
