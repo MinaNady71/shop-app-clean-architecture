@@ -9,7 +9,6 @@ import 'package:flutter_advanced_clean_architecture/presentation/resources/strin
 import 'package:flutter_advanced_clean_architecture/presentation/resources/values_manager.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import '../../../resources/language_manager.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
