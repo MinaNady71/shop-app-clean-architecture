@@ -10,14 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../resources/values_manager.dart';
 
-class StoreDetailsView extends StatefulWidget {
+class StoreDetailsView extends StatelessWidget {
    const StoreDetailsView({Key? key}) : super(key: key);
 
-  @override
-  State<StoreDetailsView> createState() => _StoreDetailsViewState();
-}
-
-class _StoreDetailsViewState extends State<StoreDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
